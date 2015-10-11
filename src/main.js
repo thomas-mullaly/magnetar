@@ -26,6 +26,7 @@
 
         mainWindow.openDevTools();
 
+
         mainWindow.on("close", function () {
             global.magnetar.mainWindow = null;
         });

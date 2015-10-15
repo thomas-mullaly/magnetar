@@ -1,5 +1,11 @@
 {
-    "name": "magnetar",
-    "version": "0.1.0",
-    "main": "src/main.js"
+  "name": "magnetar",
+  "version": "0.1.0",
+  "main": "src/main.js",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-babel": "^5.0.3",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.1"
+  }
 }

@@ -24,6 +24,14 @@ module.exports = function (grunt) {
                 src: ["package.json"],
                 dest: `${distDir}`
             }]
+        },
+        html: {
+            files: [{
+                expand: true,
+                cwd: appDir,
+                src: ["**/*.html", "!bower_components/**/*.html"],
+                dest: distAppDir
+            }]
         }
     };
 
@@ -53,5 +61,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
 
-    grunt.registerTask("default", ["clean", "babel", "copy:bower", "copy:electronPackage"]);
+    grunt.registerTask("default", ["clean", "babel", "copy:bower", "copy:electronPackage", "copy:html"]);
 };

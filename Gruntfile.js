@@ -1,9 +1,32 @@
-module.exports = function (grunt) {
-    "use strict";
-    const srcDir = "src";
-    const appDir = `${srcDir}/app`;
-    const bowerComponentsDir = `${appDir}/bower_components`;
-    const buildDir = "build";
+"use strict";
+
+let path = require("path");
+
+module.exports = (grunt) => {
+    let homeDir = "";
+
+    if (process.platform === "darwin" || process.platform === "linux") {
+        homeDir = process.env.HOME;
+    }
+
+    grunt.file.setBase(path.resolve("."));
+
+    let packageJson = grunt.file.readJSON("package.json");
+
+    let appName = packageJson.name;
+
+    if (process.platform === "darwin") {
+        appName += ".app";
+    }
+
+    const srcDir = path.resolve("src");
+    const srcAppDir = path.join(srcDir, "app");
+    const srcBowerComponentsDir = path.join(srcAppDir, "bower_components");
+    const buildDir = path.resolve("build");
+    const compileDir = path.join(buildDir, "compile");
+    const compileSrcDir = path.join(compileDir, "src");
+    const compileAppDir = path.join(compileSrcDir, "app");
+    const compileBowerComponentsDir = path.join(compileAppDir, "bower_components");
     const distDir = `${buildDir}/dist`;
     const distSrcDir = `${distDir}/src`;
     const distAppDir = `${distSrcDir}/app`;
@@ -13,25 +36,38 @@ module.exports = function (grunt) {
         bower: {
             files: [{
                 expand: true,
-                cwd: bowerComponentsDir,
+                cwd: srcBowerComponentsDir,
                 src: ["**"],
-                dest: distBowerComponents
+                dest: compileBowerComponentsDir
             }]
         },
         electronPackage: {
             files: [{
                 expand: true,
                 src: ["package.json"],
-                dest: `${distDir}`
+                dest: compileDir
             }]
         },
         html: {
             files: [{
                 expand: true,
-                cwd: appDir,
+                cwd: srcAppDir,
                 src: ["**/*.html", "!bower_components/**/*.html"],
-                dest: distAppDir
+                dest: compileAppDir
             }]
+        }
+    };
+
+    let electronConfig = {
+        osxBuild: {
+            options: {
+                name: packageJson.name,
+                dir: compileDir,
+                out: distDir,
+                version: "0.34.0",
+                platform: "all",
+                arch: "x64"
+            }
         }
     };
 
@@ -44,22 +80,38 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: srcDir,
                 src: ["**/*.js", "!app/bower_components/**/*.js"],
-                dest: distSrcDir,
+                dest: compileSrcDir,
                 ext: ".js"
             }]
         }
     };
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON("package.json"),
+        pkg: packageJson,
         clean: [buildDir],
         babel: babelConfig,
-        copy: copyConfig
+        copy: copyConfig,
+        "download-electron": {
+            version: packageJson.electronVersion,
+            outputDir: "electron",
+            downloadDir: path.join(homeDir, ".magnetar", "electron"),
+            rebuild: true
+        },
+        magnetar: {
+            srcDir: srcDir,
+            buildDir: buildDir,
+            distDir: distDir,
+            appName: appName
+        }
     });
 
     grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-download-electron");
+    grunt.loadNpmTasks("grunt-electron-installer");
+    grunt.loadTasks("tasks");
 
-    grunt.registerTask("default", ["clean", "babel", "copy:bower", "copy:electronPackage", "copy:html"]);
+    grunt.registerTask("compile", ["babel"]);
+    grunt.registerTask("default", ["clean", "download-electron", "build"]);
 };

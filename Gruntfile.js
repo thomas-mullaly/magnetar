@@ -64,9 +64,22 @@ module.exports = (grunt) => {
                 name: packageJson.name,
                 dir: compileDir,
                 out: distDir,
-                version: "0.34.0",
-                platform: "all",
-                arch: "x64"
+                version: packageJson.electronVersion,
+                platform: "darwin",
+                arch: "x64",
+                asar: true,
+                'app-bundle-id': "com.tmullaly.magnetar"
+            }
+        },
+        windows: {
+            options: {
+                name: packageJson.name,
+                dir: compileDir,
+                out: distDir,
+                version: packageJson.electronVersion,
+                platform: "win32",
+                arch: "x64",
+                asar: true
             }
         }
     };
@@ -91,12 +104,7 @@ module.exports = (grunt) => {
         clean: [buildDir],
         babel: babelConfig,
         copy: copyConfig,
-        "download-electron": {
-            version: packageJson.electronVersion,
-            outputDir: "electron",
-            downloadDir: path.join(homeDir, ".magnetar", "electron"),
-            rebuild: true
-        },
+        electron: electronConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -108,10 +116,9 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-download-electron");
     grunt.loadNpmTasks("grunt-electron-installer");
-    grunt.loadTasks("tasks");
+    grunt.loadNpmTasks("grunt-electron");
 
-    grunt.registerTask("compile", ["babel"]);
-    grunt.registerTask("default", ["clean", "download-electron", "build"]);
+    grunt.registerTask("compile", ["babel", "copy:bower", "copy:electronPackage", "copy:html"]);
+    grunt.registerTask("default", ["clean", "compile", "electron"]);
 };

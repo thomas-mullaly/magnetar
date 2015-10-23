@@ -68,7 +68,9 @@ module.exports = (grunt) => {
                 platform: "darwin",
                 arch: "x64",
                 asar: true,
-                'app-bundle-id': "com.tmullaly.magnetar"
+                "app-bundle-id": "com.tmullaly.magnetar",
+                "app-version": packageJson.version,
+                "helper-bundle-id": "com.tmullaly.magnetar.helper"
             }
         },
         windows: {
@@ -86,7 +88,9 @@ module.exports = (grunt) => {
 
     let babelConfig = {
         options: {
-            sourceMap: true
+            sourceMap: true,
+            blacklist: ["strict"],
+            modules: "common"
         },
         dist: {
             files: [{

@@ -55,6 +55,14 @@ module.exports = (grunt) => {
                 src: ["**/*.html", "!bower_components/**/*.html"],
                 dest: compileAppDir
             }]
+        },
+        processJs: {
+            files: [{
+                expand: true,
+                cwd: srcDir,
+                src: ["**/*.js", "!app/**/*.js"],
+                dest: compileSrcDir
+            }]
         }
     };
 
@@ -90,13 +98,13 @@ module.exports = (grunt) => {
         options: {
             sourceMap: true,
             blacklist: ["strict"],
-            modules: "common"
+            modules: "amd"
         },
         dist: {
             files: [{
                 expand: true,
                 cwd: srcDir,
-                src: ["**/*.js", "!app/bower_components/**/*.js"],
+                src: ["app/*.js", "!app/bower_components/**/*.js"],
                 dest: compileSrcDir,
                 ext: ".js"
             }]
@@ -123,6 +131,6 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-electron-installer");
     grunt.loadNpmTasks("grunt-electron");
 
-    grunt.registerTask("compile", ["babel", "copy:bower", "copy:electronPackage", "copy:html"]);
+    grunt.registerTask("compile", ["babel", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
     grunt.registerTask("default", ["clean", "compile", "electron"]);
 };

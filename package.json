@@ -1,7 +1,7 @@
 {
   "name": "magnetar",
   "version": "0.1.0",
-  "main": "src/main.js",
+  "main": "src/process/main.js",
   "electronVersion": "0.33.6",
   "devDependencies": {
     "fs-plus": "^2.8.1",
@@ -12,6 +12,9 @@
     "grunt-contrib-copy": "^0.8.1",
     "grunt-download-electron": "^2.1.2",
     "grunt-electron": "^2.0.1",
-    "grunt-electron-installer": "^1.0.8"
+    "grunt-electron-installer": "^1.0.8",
+    "grunt-ts": "^5.1.0",
+    "tsd": "^0.6.5",
+    "typescript": "^1.6.2"
   }
 }

@@ -117,6 +117,17 @@ module.exports = (grunt) => {
         outputDir: electronDownloadDir
     };
 
+    let typescriptConfig = {
+        process: {
+            src: ["process/*.ts", "!process/typings/*.ts"],
+            outDir: compileDir,
+            tsconfig: path.join(srcDir, "process"),
+            options: {
+                sourceMap: true,
+                sourceRoot: srcDir
+            }
+        }
+    }
     grunt.initConfig({
         pkg: packageJson,
         clean: [buildDir],
@@ -124,6 +135,7 @@ module.exports = (grunt) => {
         copy: copyConfig,
         electron: electronConfig,
         "download-electron": downloadElectronConfig,
+        ts: typescriptConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -138,8 +150,9 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-electron-installer");
     grunt.loadNpmTasks("grunt-electron");
     grunt.loadNpmTasks("grunt-download-electron");
+    grunt.loadNpmTasks("grunt-ts");
 
-    grunt.registerTask("compile", ["clean", "babel", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
+    grunt.registerTask("compile", ["clean", "babel", "ts:process", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
     grunt.registerTask("default", ["download-electron", "compile"]);
     grunt.registerTask("package", ["compile", "electron"]);
 };

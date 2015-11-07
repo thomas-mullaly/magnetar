@@ -95,23 +95,6 @@ module.exports = (grunt) => {
         }
     };
 
-    let babelConfig = {
-        options: {
-            sourceMap: true,
-            blacklist: ["strict"],
-            modules: "amd"
-        },
-        dist: {
-            files: [{
-                expand: true,
-                cwd: srcDir,
-                src: ["app/*.js", "!app/bower_components/**/*.js"],
-                dest: compileSrcDir,
-                ext: ".js"
-            }]
-        }
-    };
-
     let downloadElectronConfig = {
         version: packageJson.electronVersion,
         outputDir: electronDownloadDir
@@ -126,12 +109,21 @@ module.exports = (grunt) => {
                 sourceMap: true,
                 sourceRoot: srcDir
             }
+        },
+        app: {
+            src: ["app/*.ts", "!app/typings/*.ts"],
+            outDir: compileDir,
+            tsconfig: path.join(srcDir, "app"),
+            options: {
+                sourceRoot: srcDir,
+                sourceMap: true
+            }
         }
-    }
+    };
+
     grunt.initConfig({
         pkg: packageJson,
         clean: [buildDir],
-        babel: babelConfig,
         copy: copyConfig,
         electron: electronConfig,
         "download-electron": downloadElectronConfig,
@@ -144,7 +136,6 @@ module.exports = (grunt) => {
         }
     });
 
-    grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-electron-installer");
@@ -152,7 +143,7 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-download-electron");
     grunt.loadNpmTasks("grunt-ts");
 
-    grunt.registerTask("compile", ["clean", "babel", "ts:process", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
+    grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
     grunt.registerTask("default", ["download-electron", "compile"]);
     grunt.registerTask("package", ["compile", "electron"]);
 };

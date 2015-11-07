@@ -56,14 +56,6 @@ module.exports = (grunt) => {
                 src: ["**/*.html", "!bower_components/**/*.html"],
                 dest: compileAppDir
             }]
-        },
-        processJs: {
-            files: [{
-                expand: true,
-                cwd: srcDir,
-                src: ["**/*.js", "!app/**/*.js"],
-                dest: compileSrcDir
-            }]
         }
     };
 
@@ -121,6 +113,17 @@ module.exports = (grunt) => {
         }
     };
 
+    let tsdConfig = {
+        app: {
+            options: {
+                command: "reinstall",
+                latest: true,
+                overwrite: true,
+                config: path.join(srcDir, "app", "tsd.json")
+            }
+        }
+    };
+
     grunt.initConfig({
         pkg: packageJson,
         clean: [buildDir],
@@ -128,6 +131,7 @@ module.exports = (grunt) => {
         electron: electronConfig,
         "download-electron": downloadElectronConfig,
         ts: typescriptConfig,
+        tsd: tsdConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -142,8 +146,11 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-electron");
     grunt.loadNpmTasks("grunt-download-electron");
     grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-tsd");
 
-    grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
-    grunt.registerTask("default", ["download-electron", "compile"]);
-    grunt.registerTask("package", ["compile", "electron"]);
+    grunt.registerTask("bootstrap", ["tsd"]);
+    grunt.registerTask("copy-resources", ["copy:bower", "copy:electronPackage", "copy:html"])
+    grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy-resources"]);
+    grunt.registerTask("default", ["bootstrap", "download-electron", "compile"]);
+    grunt.registerTask("package", ["bootstrap", "compile", "electron"]);
 };

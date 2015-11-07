@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+"use strict";
+
+let childProcess = require("./utils/child-process-helpers");
+let path = require("path");
+
+let executeCommands = (commands, done, index) => {
+    index = (index == undefined ? 0 : index);
+    if (index < commands.length) {
+        let command = commands[index];
+        if (command.message) {
+            console.log(command.message);
+        }
+
+        let options = null;
+        if (typeof command !== "string") {
+            options = command.options;
+            command = command.command;
+        }
+
+        childProcess.exec(command, options, executeCommands.bind(this, commands, done, index + 1));
+    } else {
+        done(null);
+    }
+};
+
+let npmCommand = "npm install";
+let npmOptions = {cwd: path.resolve(__dirname, "..")};
+let commands = [{
+    command: npmCommand,
+    message: "Installing npm modules",
+    options: npmOptions
+}];
+
+process.chdir(path.dirname(__dirname));
+executeCommands(commands, process.exit);

@@ -31,6 +31,7 @@ module.exports = (grunt) => {
     const distSrcDir = `${distDir}/src`;
     const distAppDir = `${distSrcDir}/app`;
     const distBowerComponents = `${distAppDir}/bower_components`;
+    const electronDownloadDir = path.resolve("electron");
 
     let copyConfig = {
         bower: {
@@ -111,12 +112,18 @@ module.exports = (grunt) => {
         }
     };
 
+    let downloadElectronConfig = {
+        version: packageJson.electronVersion,
+        outputDir: electronDownloadDir
+    };
+
     grunt.initConfig({
         pkg: packageJson,
         clean: [buildDir],
         babel: babelConfig,
         copy: copyConfig,
         electron: electronConfig,
+        "download-electron": downloadElectronConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -130,7 +137,9 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-electron-installer");
     grunt.loadNpmTasks("grunt-electron");
+    grunt.loadNpmTasks("grunt-download-electron");
 
-    grunt.registerTask("compile", ["babel", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
-    grunt.registerTask("default", ["clean", "compile", "electron"]);
+    grunt.registerTask("compile", ["clean", "babel", "copy:bower", "copy:electronPackage", "copy:html", "copy:processJs"]);
+    grunt.registerTask("default", ["download-electron", "compile"]);
+    grunt.registerTask("package", ["compile", "electron"]);
 };

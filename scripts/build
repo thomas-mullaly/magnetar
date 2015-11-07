@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+"use strict";
+
+let childProcess = require("./utils/child-process-helpers");
+let runGrunt = require("./utils/run-grunt");
+let path = require("path");
+
+process.chdir(path.dirname(__dirname));
+
+childProcess.exec("node scripts/bootstrap", () => {
+    let args = process.argv.slice(2);
+    runGrunt(args, process.exit);
+});

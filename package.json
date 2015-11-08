@@ -15,6 +15,7 @@
     "grunt-electron-installer": "^1.0.8",
     "grunt-ts": "^5.1.0",
     "grunt-tsd": "^0.1.0",
+    "grunt-wiredep": "^2.0.0",
     "tsd": "^0.6.5",
     "typescript": "^1.6.2"
   }

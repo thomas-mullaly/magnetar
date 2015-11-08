@@ -21,16 +21,16 @@ module.exports = (grunt) => {
 
     const srcDir = path.resolve("src");
     const srcAppDir = path.join(srcDir, "app");
-    const srcBowerComponentsDir = path.join(srcAppDir, "bower_components");
+    const srcBowerComponentsDir = path.join(srcAppDir, "components");
     const buildDir = path.resolve("build");
     const compileDir = path.join(buildDir, "compile");
     const compileSrcDir = path.join(compileDir, "src");
     const compileAppDir = path.join(compileSrcDir, "app");
-    const compileBowerComponentsDir = path.join(compileAppDir, "bower_components");
+    const compileBowerComponentsDir = path.join(compileAppDir, "components");
     const distDir = `${buildDir}/dist`;
     const distSrcDir = `${distDir}/src`;
     const distAppDir = `${distSrcDir}/app`;
-    const distBowerComponents = `${distAppDir}/bower_components`;
+    const distBowerComponents = `${distAppDir}/components`;
     const electronDownloadDir = path.resolve("electron");
 
     let copyConfig = {
@@ -53,7 +53,7 @@ module.exports = (grunt) => {
             files: [{
                 expand: true,
                 cwd: srcAppDir,
-                src: ["**/*.html", "!bower_components/**/*.html"],
+                src: ["**/*.html", "!components/**/*.html"],
                 dest: compileAppDir
             }]
         }
@@ -122,6 +122,17 @@ module.exports = (grunt) => {
         }
     };
 
+    let wiredepConfig = {
+        task: {
+            src: [
+                path.resolve(compileAppDir, "index.html")
+            ],
+            options: {
+                directory: compileBowerComponentsDir
+            }
+        }
+    };
+
     grunt.initConfig({
         pkg: packageJson,
         clean: [buildDir],
@@ -130,6 +141,7 @@ module.exports = (grunt) => {
         "download-electron": downloadElectronConfig,
         ts: typescriptConfig,
         bower: bowerConfig,
+        wiredep: wiredepConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -145,9 +157,10 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-download-electron");
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-bower");
+    grunt.loadNpmTasks("grunt-wiredep");
 
     grunt.registerTask("copy-resources", ["copy:bower", "copy:electronPackage", "copy:html"])
-    grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy-resources"]);
+    grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy-resources", "wiredep"]);
     grunt.registerTask("default", ["download-electron", "compile"]);
     grunt.registerTask("package", ["compile", "electron"]);
 };

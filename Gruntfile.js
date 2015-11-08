@@ -113,13 +113,11 @@ module.exports = (grunt) => {
         }
     };
 
-    let tsdConfig = {
-        app: {
+    let bowerConfig = {
+        dev: {
+            dest: "src/app/lib",
             options: {
-                command: "reinstall",
-                latest: true,
-                overwrite: true,
-                config: path.join(srcDir, "app", "tsd.json")
+                expand: true
             }
         }
     };
@@ -131,7 +129,7 @@ module.exports = (grunt) => {
         electron: electronConfig,
         "download-electron": downloadElectronConfig,
         ts: typescriptConfig,
-        tsd: tsdConfig,
+        bower: bowerConfig,
         magnetar: {
             srcDir: srcDir,
             buildDir: buildDir,
@@ -146,11 +144,10 @@ module.exports = (grunt) => {
     grunt.loadNpmTasks("grunt-electron");
     grunt.loadNpmTasks("grunt-download-electron");
     grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks("grunt-tsd");
+    grunt.loadNpmTasks("grunt-bower");
 
-    grunt.registerTask("bootstrap", ["tsd"]);
     grunt.registerTask("copy-resources", ["copy:bower", "copy:electronPackage", "copy:html"])
     grunt.registerTask("compile", ["clean", "ts:process", "ts:app", "copy-resources"]);
-    grunt.registerTask("default", ["bootstrap", "download-electron", "compile"]);
-    grunt.registerTask("package", ["bootstrap", "compile", "electron"]);
+    grunt.registerTask("default", ["download-electron", "compile"]);
+    grunt.registerTask("package", ["compile", "electron"]);
 };

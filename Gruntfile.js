@@ -128,7 +128,8 @@ module.exports = (grunt) => {
                 path.resolve(compileAppDir, "index.html")
             ],
             options: {
-                directory: compileBowerComponentsDir
+                directory: compileBowerComponentsDir,
+                exclude: [/requirejs/]
             }
         }
     };

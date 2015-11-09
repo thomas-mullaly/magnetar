@@ -14,6 +14,7 @@ export class MagnetarWindow {
 
         this.mainWindow.on("close", this.onClose);
         this.mainWindow.loadUrl(`file://${__dirname}/../app/index.html`);
+        this.mainWindow.openDevTools(true);
     }
 
     close() {

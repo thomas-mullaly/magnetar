@@ -1,4 +1,10 @@
 /// <reference path="../../typings/requirejs/require.d.ts" />
-import r = require("require");
+export class MagnetarApp {
+    constructor() {
 
-console.log("hello world");
+    }
+
+    static start() {
+        var app = new MagnetarApp();
+    }
+}

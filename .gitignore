@@ -5,4 +5,4 @@ electron/
 typings/
 .baseDir.ts
 .tscache/
-src/app/components/
+src/app/jspm_packages/

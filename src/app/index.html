@@ -2,25 +2,12 @@
 <html>
     <head>
         <title>Hello World</title>
-        <!-- bower:css -->
-        <!-- endbower -->
     </head>
-    <body class="fullbleed layout vertical">
-        <header>
-            <paper-header-panel class="flex blue">
-                <paper-toolbar>
-                    <div>Hello World!</div>
-                </paper-toolbar>
-            </paper-header-panel>
-        </header>
-
-        <main>
-            <h1>Hello, World</h1>
-        </main>
-
-        <!-- bower:js -->
-        <!-- endbower -->
-        <script src="require-config.js"></script>
-        <script data-main="main" src="components/requirejs/require.js"></script>
+    <body aurelia-app>
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        <script>
+            System.import("aurelia-bootstrap");
+        </script>
     </body>
 </html>

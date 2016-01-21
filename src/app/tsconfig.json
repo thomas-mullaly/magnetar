@@ -4,9 +4,12 @@
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
         "declaration": true,
-        "module": "amd",
+        "module": "system",
         "rootDir": ".",
         "sourceMap": true,
         "target": "es5"
-    }
+    },
+    "exclude": [
+        "jspm_packages"
+    ]
 }

@@ -1,10 +1,13 @@
-/// <reference path="../../typings/requirejs/require.d.ts" />
-export class MagnetarApp {
-    constructor() {
+export class Welcome {
+    heading: string = "Hello Aurelia";
+    firstName: string = "Thomas";
+    lastName: string = "Mullaly";
 
+    get fullName() : string {
+        return `${this.firstName} ${this.lastName}`;
     }
 
-    static start() {
-        var app = new MagnetarApp();
+    submit(): void {
+        alert(`Welcome ${this.fullName}!`);
     }
 }

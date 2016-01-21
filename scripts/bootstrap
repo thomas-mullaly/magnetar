@@ -26,7 +26,7 @@ let executeCommands = (commands, done, index) => {
 
 let npmCommand = "npm install";
 let npmOptions = {cwd: path.resolve(__dirname, "..")};
-let bowerCommand = "bower install";
+let bowerCommand = "jspm install";
 let bowerOptions = {cwd: path.resolve(__dirname, "..")};
 let tsdCommand = "tsd install";
 let tsdOptions = {cwd: path.resolve(__dirname, "..")};

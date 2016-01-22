@@ -19,12 +19,15 @@ gulp.task("copy", ["clean"], () => {
         `${srcDir}/**/*.sass`,
         `${srcDir}/**/*.js`,
         `${srcDir}/**/*.html`,
-        `${srcDir}/**/*.json`,
-        "package.json"
+        `${srcDir}/**/*.json`
     ]).pipe(gulp.dest(`${compileDir}/src`));
 });
 
-gulp.task("typescript", ["copy"], () => {
+gulp.task("copy-package", ["clean"], () => {
+    return gulp.src(["package.json"]).pipe(gulp.dest(compileDir));
+});
+
+gulp.task("typescript-app", ["copy", "copy-package"], () => {
     let tsProject = ts.createProject(`${srcDir}/app/tsconfig.json`);
 
     let tsResult = tsProject.src([
@@ -33,6 +36,16 @@ gulp.task("typescript", ["copy"], () => {
 
     return tsResult.js.pipe(gulp.dest(`${compileDir}/src/app`));
 });
+
+gulp.task("typescript-process", ["copy", "copy-package"], () => {
+    let tsProject = ts.createProject(`${srcDir}/process/tsconfig.json`);
+
+    let tsResult = tsProject.src("").pipe(ts(tsProject));
+
+    return tsResult.js.pipe(gulp.dest(`${compileDir}/src/process`));
+});
+
+gulp.task("typescript", ["typescript-app", "typescript-process"]);
 
 gulp.task("jspm", (cb) => {
     exec("jspm install", (err) => {

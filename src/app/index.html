@@ -2,23 +2,12 @@
 <html>
     <head>
         <title>Hello World</title>
-        <script type="application/javascript" src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
-        <link rel="import" href="bower_components/paper-styles/paper-styles.html">
-        <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
     </head>
-    <body class="fullbleed layout vertical">
-        <header>
-            <paper-header-panel class="flex blue">
-                <paper-toolbar>
-                    <div>Hello World!</div>
-                </paper-toolbar>
-            </paper-header-panel>
-        </header>
-
-        <main>
-            <h1>Hello, World</h1>
-        </main>
-
-        <script type="application/javascript" src="app.js"></script>
+    <body aurelia-app>
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        <script>
+            System.import("aurelia-bootstrapper");
+        </script>
     </body>
 </html>

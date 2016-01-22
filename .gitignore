@@ -2,3 +2,7 @@ node_modules/
 src/app/bower_components/
 build/
 electron/
+typings/
+.baseDir.ts
+.tscache/
+src/app/jspm_packages/

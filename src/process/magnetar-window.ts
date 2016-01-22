@@ -1,8 +1,7 @@
-"use strict";
+import BrowserWindow = require("browser-window");
 
-let BrowserWindow = require("browser-window");
-
-module.exports = class MagnetarWindow {
+export class MagnetarWindow {
+    mainWindow: GitHubElectron.BrowserWindow;
     constructor() {
         this.mainWindow = null;
     }
@@ -15,6 +14,7 @@ module.exports = class MagnetarWindow {
 
         this.mainWindow.on("close", this.onClose);
         this.mainWindow.loadUrl(`file://${__dirname}/../app/index.html`);
+        this.mainWindow.openDevTools(true);
     }
 
     close() {

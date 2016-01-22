@@ -1,9 +1,8 @@
-"use strict";
+import app = require("app");
+import {MagnetarWindow} from "./magnetar-window";
 
-let app = require("app");
-let MagnetarWindow = require("./magnetar-window");
-
-module.exports = class MagnetarApp {
+export class MagnetarApp {
+    mainWindow: MagnetarWindow;
     constructor() {
         this.mainWindow = null;
     }

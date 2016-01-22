@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+"use strict";
+
+let childProcess = require("./utils/child-process-helpers");
+let path = require("path");
+
+console.log("Updating aurelia typings...");
+process.chdir(path.dirname(__dirname));
+
+childProcess.exec("gulp update-aurelia", () => {
+    console.log("Typings updated...");
+    process.exit();
+});
